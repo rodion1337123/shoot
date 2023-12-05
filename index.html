@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Shoot</title>
+	<style type="text/css">
+		html, body{
+			height: 100%;
+			font-family: arial;
+		}
+	.item{
+		height:150px;
+		width:100px;
+		position: absolute;
+		background-size: 100% 100%;
+	}
+	.rules{
+		position: absolute;
+		top: 220px; 
+		left: 800px; 
+		width: 700px;  
+		background: grey; 
+		color: white;
+		border-radius: 10px;
+		padding: 10px;
+	}
+
+	</style>
+
+</head>
+<body style="font-family: cursive arial; color: blue; background-image: url(mid.png); height: 100%; background-size: 100% 100%;">
+	<!-- !!!!!!! -->
+	<button class="btn" style="position: absolute;">Начать игру</button>
+	<h1 class="ochki" style="position:absolute;">Очки: <span class="pts">0</span>
+	</h1>
+	<h1 class="vremya" style="position:absolute;">Время:
+		<spanc class= " timeleeft">15</span>
+	</h1>
+
+	<div class="rules">
+		<h3>В этой игре тебе потребуется за 15 секунд убить наибольшее количество героев, насколько ты сможешь. Чтобы убить героя, тебе нужно кликнуть по нему ЛКМ. При этом каждый герой даёт определённое количество баллов. Если в конце таймера баллы будут меньше 20, то ты проиграешь.
+		</h3>
+		<div style="display: flex; justify-content: space-between; ">
+			<div style="border-right: 1px solid black; padding-right: 10px;"><img src="sven.png" style="width:140px;"><p>За свена Тебе даётся 1 очко.</p></div>
+			<div style="border-right: 1px solid black; padding-right: 10px;"><img src="antimage.png" style="width:140px; "><p>За антимага тебе даётся 2 очка.</p></div>
+			<div><img src="skeletons.png" style="width:140px; "><p>За скелета у тебя отнимается 2 очка.</p></div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		let lvl = [200, 400, 600];
+		let points = 0;
+		let time = 15;
+		let timerInterval;
+		let create;
+		let images = [{image:"url(sven.png)", type: "norm"} , {image:"url(antimage.png)", type: "good"}, { image:"url(skeletons.png)", type: "bad"}]
+
+
+
+		document.querySelector(".btn").style.background = "lightblue";
+		document.querySelector(".btn").style.height = 50+"px";
+		document.querySelector(".btn").style.width = 150+"px";
+		document.querySelector(".btn").style.left = 1020+"px";
+		document.querySelector(".ochki").style.left = 1020+"px";
+		document.querySelector(".vremya").style.left = 1020+"px";
+		document.querySelector(".ochki").style.top = 100+"px";
+		document.querySelector(".vremya").style.top = 150+"px";
+
+
+
+		function timeLeft() {
+			time = time - 1;
+			document.querySelector(".timeleeft").innerHTML = time;
+			if (time ==0) {
+				clearInterval(timerInterval);
+				clearInterval(create);
+				if (points>= 20) 
+					{alert("Ты победил!")
+
+				}
+				if (points<20) {
+					alert("Ты проиграл!")
+				}
+			}
+		}
+
+
+
+		
+		function createItems() {
+
+			let item = document.createElement("div");
+			document.body.append(item);
+			item.className = "item";
+			item.style.left = getRandom(2000)+"px";
+			item.style.top  = lvl[getRandom(2)]+"px";
+			let index = getRandom(2);
+			item.style.backgroundImage = images[index].image; 
+			item.type = images[index].type;
+			item.onclick = function(){
+				if (item.type == "good") 
+				{
+					points = points + 2;
+				}
+				else if (item.type == "bad"){
+					points = points -2;
+				}
+				else{
+					points = points +1
+				}
+					item.style.display = "none";
+					document.querySelector(".pts").innerHTML = points;
+
+			}
+			console.dir(item)
+
+		}
+
+		function getRandom (argum) {
+			let num = Math.random()*argum;
+			let rand = Math.round(num);
+			return rand;
+			clearInterval(timerInterval);
+		}
+
+	
+
+		document.querySelector(".btn").onclick = function () {
+			timerInterval = setInterval(timeLeft, 1000);
+			create = setInterval(createItems, 300);
+			document.querySelector(".rules").style.display = "none";
+		}
+
+	</script>
+</body>
+</html>
